@@ -1,6 +1,8 @@
 from sqlalchemy import create_engine
 import pandas as pd
-engine = create_engine("postgresql://postgres:new_password@localhost:5432/banking_practice")
+engine = create_engine(
+    f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+)
 print("Connected successfully");
 
 df = pd.read_sql("SELECT * from transactions",engine);
