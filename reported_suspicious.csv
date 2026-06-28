@@ -1,0 +1,4 @@
+id,account_number,amount,transaction_type,transaction_date
+5,ACC-004,3200.0,deposit,2024-01-18
+7,ACC-005,5000.0,deposit,2024-01-22
+14,ACC-002,4500.0,deposit,2024-02-14
