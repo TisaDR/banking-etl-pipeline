@@ -1,5 +1,8 @@
 from dotenv import load_dotenv
 import os
+from sqlalchemy import create_engine
+import pandas as pd
+
 
 load_dotenv()
 
@@ -23,6 +26,7 @@ def transform(df):
     
     # 2. convert transaction_date to datetime
     df['transaction_date'] = pd.to_datetime(df['transaction_date'])
+    df['transaction_month'] = df['transaction_date'].dt.month
     
     # 3. lowercase and strip whitespace from transaction_type
     df['transaction_type'] = df['transaction_type'].str.lower().str.strip()
@@ -46,6 +50,15 @@ def transform(df):
     
     # print how many rows after transform
     print(df.shape)
+    
+    def risk_flags(row):
+        if row['amount'] > 3000 and row['transaction_type'] == "withdrawal":
+            return "HIGH"
+        return "LOW"
+    df['risk_flag'] =df.apply(risk_flags,axis=1)
+    
+    
+        
     # return cleaned DataFrame
     return(df)
 
@@ -68,7 +81,7 @@ def load(df, table_name):
 
 if __name__ == "__main__":
     # call extract with your csv path
-  raw =  extract(r'C:\Users\patel\OneDrive\Documentos\Desktop\password-manager-api\transactions.csv')
+  raw =  extract('transactions.csv')
     # call transform on the result
   transactions_clean=transform(raw)
     # call load with table name 'transactions_clean'
